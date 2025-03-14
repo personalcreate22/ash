@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Amazing Sister</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f9f9f9;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         .hero {
@@ -30,7 +29,7 @@
             font-size: 4rem;
             font-weight: bold;
             opacity: 0;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
         }
 
         .hero p {
@@ -38,6 +37,7 @@
             opacity: 0;
             max-width: 700px;
             margin: 0 auto;
+            transition: opacity 1.5s ease-in-out 0.5s;
         }
 
         .btn {
@@ -88,14 +88,9 @@
             transition: transform 0.3s;
             position: relative;
             margin-bottom: 30px;
-        }
-
-        .photo-item:nth-child(even) {
-            align-self: flex-end;
-        }
-
-        .photo-item:hover {
-            transform: scale(1.1);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
 
         .photo-item img {
@@ -131,17 +126,6 @@
             font-size: 1.2rem;
             margin-top: 40px;
         }
-
-        .footer a {
-            color: #FF69B4;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        .footer a:hover {
-            color: #8A2BE2;
-        }
     </style>
 </head>
 <body>
@@ -160,36 +144,41 @@
                 <img src="https://i.natgeofe.com/n/28f65c83-cb91-4489-ba1e-b62c76863c43/01_slothlove_leaves.jpg" alt="Memory 1">
                 <div class="photo-caption">Dancing in the Sunset</div>
             </div>
-            <div class="photo-item" style="transform: translateX(-8vh);">
-                <img src="https://i.natgeofe.com/n/28f65c83-cb91-4489-ba1e-b62c76863c43/01_slothlove_leaves.jpg" alt="Memory 2">
+            <div class="photo-item">
+                <img src="https://via.placeholder.com/600x400?text=Memory+2" alt="Memory 2">
                 <div class="photo-caption">Our Family Trip</div>
             </div>
             <div class="photo-item">
-                <img src="https://i.natgeofe.com/n/28f65c83-cb91-4489-ba1e-b62c76863c43/01_slothlove_leaves.jpg" alt="Memory 3">
+                <img src="https://via.placeholder.com/600x400?text=Memory+3" alt="Memory 3">
                 <div class="photo-caption">Summer Fun</div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
-        <p>Made with ❤️ for my amazing sister 
+        <p>Made with ❤️ for my amazing sister</p>
     </footer>
 
     <script>
-        gsap.to(".hero h1", { opacity: 1, y: -20, duration: 1.5, ease: "power2.out" });
-        gsap.to(".hero p", { opacity: 1, y: -10, duration: 1.5, delay: 0.5, ease: "power2.out" });
-        gsap.to(".btn", { opacity: 1, y: 0, duration: 1.5, delay: 1, ease: "power2.out" });
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".hero h1").style.opacity = "1";
+            document.querySelector(".hero h1").style.transform = "translateY(-20px)";
+            document.querySelector(".hero p").style.opacity = "1";
+            document.querySelector(".btn").style.opacity = "1";
+            
+            let photos = document.querySelectorAll(".photo-item");
+            let observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "scale(1)";
+                    }
+                });
+            }, { threshold: 0.5 });
 
-        gsap.from(".photo-item", {
-            opacity: 0,
-            scale: 0.8,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: ".gallery",
-                start: "top 80%",
-                toggleActions: "play none none none",
-            }
+            photos.forEach(photo => {
+                observer.observe(photo);
+            });
         });
     </script>
 </body>
